@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Purchases>
+	<Purchase>
+		<Description>A record from a third file</Description>
+	</Purchase>
+	<Purchase>
+		<Description>A second record from a third file</Description>
+	</Purchase>
+</Purchases>
