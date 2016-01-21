@@ -30,11 +30,15 @@ def to_xml(filename):
             print('Malformed xml: ' + filename + str(err.position))
 
 
+#
+def xml_to_set(xml):
+    return xml.getroot().findall('Purchase')
+
+
 # return a set of unique elements in xml tree
 def add_to_set(elements, xml):
-    for (element) in xml.getroot().findall('Purchase'):
-        if not(ET.tostring(element).strip() in elements):
-            elements.add(ET.tostring(element).strip())
+    for (element) in xml:
+        elements.add(ET.tostring(element).strip())
 
 
 # print a set of elements as a flat xml to filename
@@ -65,7 +69,7 @@ def get_test_files():
 def build_canon(directory):
     elements = set()
     for (filename) in get_xml_files(directory):
-        add_to_set(elements, to_xml(filename))
+        add_to_set(elements, xml_to_set(to_xml(filename)))
     if elements != set():
         print_set(elements, get_canon_path(directory), 'wb')
 
@@ -75,12 +79,8 @@ def build_canon(directory):
 # and a set containing all the elements of canon with the new unique elements of xml appended
 def remove_duplicates(xml, canon):
     output = set()
-    for (element) in xml.getroot():
-        if not(ET.tostring(element).strip() in canon):
-            add_to_set(output, xml)
-            add_to_set(canon, xml)
-        else:
-            print('Duplicate found:' + str(ET.tostring(element).strip()))
+    add_to_set(output, xml_to_set(xml))
+    add_to_set(canon, xml_to_set(xml))
     return output, canon
 
 
@@ -89,7 +89,7 @@ def create_upload_file(directory, filename):
     xml = to_xml(filename)
     canon = set()
     try:
-        add_to_set(canon, ET.parse(get_canon_path(directory)))
+        add_to_set(canon, xml_to_set(ET.parse(get_canon_path(directory))))
     except ET.ParseError:
         print('Malformed canon: ' + filename)
         return
