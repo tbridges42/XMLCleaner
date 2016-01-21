@@ -30,15 +30,23 @@ def to_xml(filename):
             print('Malformed xml: ' + filename + str(err.position))
 
 
-#
+def normalize_record(element):
+    return ET.tostring(element).strip()
+
+
+# convert an xml tree of 'Purchase' to a set of records
 def xml_to_set(xml):
-    return xml.getroot().findall('Purchase')
+    xml_set = xml.getroot().findall('Purchase')
+    norm_set = set()
+    for element in xml_set:
+        norm_set.add(normalize_record(element))
+    return norm_set
 
 
 # return a set of unique elements in xml tree
 def add_to_set(elements, xml):
     for (element) in xml:
-        elements.add(ET.tostring(element).strip())
+        elements.add(element)
 
 
 # print a set of elements as a flat xml to filename
@@ -74,13 +82,13 @@ def build_canon(directory):
         print_set(elements, get_canon_path(directory), 'wb')
 
 
-# remove duplicates from xml
+# remove duplicates from a set of records based on a canonical history of past records
 # the returned tuple will contain an set containing all the unique elements of xml that are not in canon
 # and a set containing all the elements of canon with the new unique elements of xml appended
-def remove_duplicates(xml, canon):
+def remove_duplicates(xml_set, canon):
     output = set()
-    add_to_set(output, xml_to_set(xml))
-    add_to_set(canon, xml_to_set(xml))
+    add_to_set(output, xml_set)
+    add_to_set(canon, xml_set)
     return output, canon
 
 
@@ -95,7 +103,7 @@ def create_upload_file(directory, filename):
         return
     except FileNotFoundError:
         print('No Canon')
-    output, canon = remove_duplicates(xml, canon)
+    output, canon = remove_duplicates(xml_to_set(xml), canon)
     print_set(output, get_output_path(filename), 'wb')
     print_set(canon, get_canon_path(directory), 'wb')
 
