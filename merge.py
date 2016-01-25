@@ -1,4 +1,4 @@
-import cleaner
+import my_xml
 import time
 import os
 from os import walk
@@ -27,12 +27,12 @@ def main():
         agencyset = set()
         if agency in agencies:
             agencyset = agencies[agency]
-        cleaner.add_to_set(agencyset, cleaner.to_xml(filename))
+        agencyset |= my_xml.from_file(filename)
         agencies[agency] = agencyset
 
     for (agency) in agencies:
         print(agency)
-        cleaner.print_set(agencies[agency], "upload-" + agency + "-" + time.strftime("%y%m%d") + "-merged.xml", "wb")
+        my_xml.print_as_xml(agencies[agency], "upload-" + agency + "-" + time.strftime("%y%m%d") + "-merged.xml", "wb")
 
 
 if __name__ == "__main__":

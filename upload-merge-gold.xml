@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<Purchases>
+	<Purchase>
+		<Description>Complicated Duplicate Record</Description>
+		<SpecificValue>126845311</SpecificValue>
+		<NIGPCode>94511561</NIGPCode>
+	</Purchase>
+	<Purchase>
+		<Description>A second record from a third file</Description>
+	</Purchase>
+	<Purchase>
+		<Description>A second record from another file</Description>
+	</Purchase>
+	<Purchase>
+		<Description>Simple Duplicate Record</Description>
+	</Purchase>
+	<Purchase>
+		<Description>Simple Unique Record</Description>
+	</Purchase>
+	<Purchase>
+		<Description>A record from a third file</Description>
+	</Purchase>
+	<Purchase>
+		<Description>Complicated Unique Record</Description>
+		<SpecificValue>1268694151</SpecificValue>
+		<NIGPCode>94511</NIGPCode>
+	</Purchase>
+	<Purchase>
+		<Description>A record from another file</Description>
+	</Purchase>
+</Purchases>
