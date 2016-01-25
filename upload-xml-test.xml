@@ -4,9 +4,7 @@
 		<Description>Simple Unique Record</Description>
 	</Purchase>
 	<Purchase>
-		<Description>Complicated Unique Record</Description>
-		<SpecificValue>1268694151</SpecificValue>
-		<NIGPCode>94511</NIGPCode>
+		<Description>Simple Duplicate Record</Description>
 	</Purchase>
 	<Purchase>
 		<Description>Complicated Duplicate Record</Description>
@@ -14,6 +12,8 @@
 		<NIGPCode>94511561</NIGPCode>
 	</Purchase>
 	<Purchase>
-		<Description>Simple Duplicate Record</Description>
+		<Description>Complicated Unique Record</Description>
+		<SpecificValue>1268694151</SpecificValue>
+		<NIGPCode>94511</NIGPCode>
 	</Purchase>
 </Purchases>

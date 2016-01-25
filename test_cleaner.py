@@ -1,8 +1,8 @@
 import unittest
 import cleaner
+import my_xml
 import os
 import shutil
-import xml.etree.ElementTree as ET
 
 
 class TestCleaner(unittest.TestCase):
@@ -15,17 +15,6 @@ class TestCleaner(unittest.TestCase):
         result = cleaner.get_agency_name('some-stuff-with-name-of-agency-85.xml')
         self.assertEquals(result, 'agency')
 
-    def equal_xml(self, gold, test):
-        xml_gold_list = list(gold.getroot().iter())
-        xml_test_list = list(test.getroot().iter())
-        self.assertEquals(len(xml_gold_list), len(xml_test_list))
-        string_gold_list = []
-        string_test_list = []
-        for i in range(1, len(xml_gold_list)):
-            string_gold_list.append(ET.tostring(xml_gold_list[i]).strip())
-            string_test_list.append(ET.tostring(xml_test_list[i]).strip())
-        for i in range(0, len(string_gold_list)):
-            self.assertTrue(string_gold_list[i] in string_test_list, str(i) + ': ' + str(string_gold_list[i]))
 
     def reset(self):
         if os.path.isfile('upload-xml-test.xml'):
@@ -84,7 +73,7 @@ class TestCleaner(unittest.TestCase):
     def test_cleaner(self):
         self.reset()
         cleaner.main()
-        self.equal_xml(cleaner.to_xml('upload-gold.xml'), cleaner.to_xml('upload-xml-test.xml'))
+        self.assertEquals(my_xml.to_set(my_xml.from_file('upload-gold.xml')), my_xml.to_set(my_xml.from_file('upload-xml-test.xml')))
 
 if __name__ == '__main__':
     unittest.main()

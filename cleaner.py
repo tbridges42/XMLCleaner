@@ -1,6 +1,6 @@
-import xml.etree.ElementTree as ET
 import shutil
 import os
+import my_xml
 from os import walk
 
 
@@ -22,39 +22,6 @@ def get_working_folder():
             return dirname
 
 
-# return an xml tree from filename
-def to_xml(filename):
-    try:
-        return ET.parse(filename)
-    except ET.ParseError as err:
-            print('Malformed xml: ' + filename + str(err.position))
-
-
-def normalize_record(element):
-    return ET.tostring(element).strip()
-
-
-# convert an xml tree of 'Purchase' to a set of records
-def xml_to_set(xml):
-    xml_set = xml.getroot().findall('Purchase')
-    norm_set = set()
-    for element in xml_set:
-        norm_set.add(normalize_record(element))
-    return norm_set
-
-
-# print a set of elements as a flat xml to filename
-def print_set(elements, filename, mode):
-    f = open(filename, mode)
-    f.write(b'<?xml version="1.0"?>\n<Purchases>\n')
-    for (element) in elements:
-        f.write(b'\t')
-        f.write(element)
-        f.write(b'\n')
-    f.write(b'</Purchases>')
-    f.close()
-
-
 # get all files to be tested
 def get_test_files():
     files = []
@@ -71,9 +38,9 @@ def get_test_files():
 def build_canon(directory):
     elements = set()
     for (filename) in get_xml_files(directory):
-        elements |= xml_to_set(to_xml(filename))
+        elements |= my_xml.to_set(my_xml.from_file(filename))
     if elements != set():
-        print_set(elements, get_canon_path(directory), 'wb')
+        my_xml.print_as_xml(elements, get_canon_path(directory), 'wb')
 
 
 # remove duplicates from a set of records based on a canonical history of past records
@@ -88,18 +55,13 @@ def remove_duplicates(xml_set, canon):
 
 # create a file of only unique records
 def create_upload_file(directory, filename):
-    xml = to_xml(filename)
+    xml = my_xml.from_file(filename)
     canon = set()
-    try:
-        canon |= xml_to_set(ET.parse(get_canon_path(directory)))
-    except ET.ParseError:
-        print('Malformed canon: ' + filename)
-        return
-    except FileNotFoundError:
-        print('No Canon')
-    output, canon = remove_duplicates(xml_to_set(xml), canon)
-    print_set(output, get_output_path(filename), 'wb')
-    print_set(canon, get_canon_path(directory), 'wb')
+    if os.path.isfile(get_canon_path(directory)):
+        canon |= my_xml.to_set(my_xml.from_file(get_canon_path(directory)))
+    output, canon = remove_duplicates(my_xml.to_set(xml), canon)
+    my_xml.print_as_xml(output, get_output_path(filename), 'wb')
+    my_xml.print_as_xml(canon, get_canon_path(directory), 'wb')
 
 
 # build a relative path and filename for a canon file
