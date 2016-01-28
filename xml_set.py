@@ -14,9 +14,19 @@ class XmlSet:
                 self.attributes == other.attributes and
                 self.children == other.children)
 
+    def __hash__(self):
+        result = 72
+        result *= self.root_tag.__hash__()
+        result *= self.text.__hash__()
+        for child in self.children:
+            result *= child.__hash__()
+        for attribute in self.attributes:
+            result *= attribute.__hash__()
+        return result
+
     @staticmethod
     def to_set(xml):
-        xml_set = xml.findall()
+        xml_set = set(list(xml))
         children_set = set()
         for (element) in xml_set:
             children_set.add(XmlSet(element))
@@ -35,3 +45,18 @@ class XmlSet:
                 strings.append('\t' + string)
         strings.append('</' + self.root_tag + '>')
         return strings
+
+
+class XmlSetBase:
+    def __init__(self, xml=ElementTree.ElementTree()):
+        if xml.getroot():
+            self.root = XmlSet(xml.getroot())
+        else:
+            self.root = XmlSet()
+
+    @staticmethod
+    def parse(source):
+        return XmlSetBase(ElementTree.parse(source))
+
+    def __eq__(self, other):
+        return self.root == other.root

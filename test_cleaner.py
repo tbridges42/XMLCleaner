@@ -3,6 +3,7 @@ import cleaner
 import my_xml
 import os
 import shutil
+from xml_set import XmlSetBase
 
 
 class TestCleaner(unittest.TestCase):
@@ -14,7 +15,6 @@ class TestCleaner(unittest.TestCase):
     def test_get_agency_name_85(self):
         result = cleaner.get_agency_name('some-stuff-with-name-of-agency-85.xml')
         self.assertEquals(result, 'agency')
-
 
     def reset(self):
         if os.path.isfile('upload-xml-test.xml'):
@@ -73,7 +73,8 @@ class TestCleaner(unittest.TestCase):
     def test_cleaner(self):
         self.reset()
         cleaner.main()
-        self.assertEquals(my_xml.to_set(my_xml.from_file('upload-gold.xml')), my_xml.to_set(my_xml.from_file('upload-xml-test.xml')))
+        self.assertEquals(XmlSetBase.parse('upload-gold.xml'),
+                          XmlSetBase.parse('upload-xml-test.xml'))
 
 if __name__ == '__main__':
     unittest.main()

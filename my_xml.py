@@ -1,6 +1,12 @@
 import xml.etree.ElementTree as ET
 
 
+# TODO: Switch to xml_set
+# TODO: Implement auto-download
+# TODO: Implement custom source/destination
+# TODO: Incorporate merge
+
+
 def normalize_record(element):
     return ET.tostring(element).strip()
 
