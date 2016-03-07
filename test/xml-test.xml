@@ -27,5 +27,13 @@
 	</Purchase>
 	<Purchase>
 		<Description>Simple Duplicate Record</Description>
-	</Purchase>	
+	</Purchase>
+	<Purchase>
+		<Description>Duplicate self-closing tag</Description>
+		<NIGPCode />
+	</Purchase>
+	<Purchase>
+		<Description>Duplicate self-closing tag</Description>
+		<NIGPCode></NIGPCode>
+	</Purchase>
 </Purchases>

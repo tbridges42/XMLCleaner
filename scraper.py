@@ -44,11 +44,15 @@ def login(creds, browser):
         else:
             raise e
 
+# TODO: Get info from config file
+
 
 def zscaler_login(browser):
     username = browser.find_element_by_id('userNameInput')
     username.click()
     username.clear()
+    username.send_keys('blah')
+    browser.find_element_by_id('passwordInput').send_keys('blah')
     browser.find_element_by_id('submitButton').click()
 
 

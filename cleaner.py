@@ -2,6 +2,7 @@ import shutil
 import os
 import my_xml
 from os import walk
+from tqdm import tqdm
 
 
 # Get all files in current directory that end in .xml
@@ -28,7 +29,6 @@ def get_test_files():
     for (dirpath, dirnames, filenames) in walk(os.path.dirname(os.path.abspath(__file__))):
         for (filename) in filenames:
             if filename.endswith('.xml'):
-                print(filename)
                 files.append(filename)
         break
     return files
@@ -84,24 +84,28 @@ def get_agency_name(filename):
 
 
 def main():
-    print("Working")
-    for (filename) in get_test_files():
-        print(filename)
-        if filename.startswith('upload-'):
-            continue
-        agency = get_agency_name(filename)
-        # if the agency has not previously been encountered, create a directory for it
-        if not (os.path.isdir(agency)):
-            os.mkdir(agency)
-        # if there is no canon file for the agency, create one
-        if not(os.path.isfile(get_canon_path(agency))):
-            build_canon(agency)
-        if not(os.path.isfile(get_output_path(filename))):
-            create_upload_file(agency, filename)
-        if not(os.path.isfile(agency + os.sep + filename)):
-            shutil.move(filename, agency)
-        else:
-            os.remove(filename)
+    files = get_test_files()
+    total_size = 0
+    for file in files:
+        total_size = total_size + os.path.getsize(file)
+    with tqdm(total=total_size, unit='B', unit_scale=True, desc='Cleaning files') as progress_bar:
+        for (filename) in get_test_files():
+            if filename.startswith('upload-'):
+                continue
+            agency = get_agency_name(filename)
+            # if the agency has not previously been encountered, create a directory for it
+            if not (os.path.isdir(agency)):
+                os.mkdir(agency)
+            # if there is no canon file for the agency, create one
+            if not(os.path.isfile(get_canon_path(agency))):
+                build_canon(agency)
+            if not(os.path.isfile(get_output_path(filename))):
+                create_upload_file(agency, filename)
+            progress_bar.update(os.path.getsize(filename))
+            if not(os.path.isfile(agency + os.sep + filename)):
+                shutil.move(filename, agency)
+            else:
+                os.remove(filename)
 
 if __name__ == "__main__":
     main()

@@ -8,12 +8,18 @@ import xml.etree.ElementTree as ET
 
 
 def normalize_record(element):
-    return ET.tostring(element).strip()
+    element_string = ET.tostring(element, method='html')
+    element_string = element_string.strip()
+    element_string = element_string.replace(b'\t', b'  ')
+    return element_string
 
 
 # convert an xml tree of 'Purchase' to a set of records
 def to_set(xml):
-    xml_set = xml.getroot().findall('Purchase')
+    try:
+        xml_set = xml.getroot().findall('Purchase')
+    except AttributeError:
+        xml_set = set()
     norm_set = set()
     for element in xml_set:
         norm_set.add(normalize_record(element))
@@ -25,7 +31,7 @@ def print_as_xml(elements, filename, mode):
     f = open(filename, mode)
     f.write(b'<?xml version="1.0"?>\n<Purchases>\n')
     for (element) in elements:
-        f.write(b'\t')
+        f.write(b'    ')
         f.write(element)
         f.write(b'\n')
     f.write(b'</Purchases>')
