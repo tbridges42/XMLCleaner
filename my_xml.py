@@ -21,8 +21,15 @@ def to_set(xml):
     except AttributeError:
         xml_set = set()
     norm_set = set()
+    purchase_orders = set()
     for element in xml_set:
-        norm_set.add(normalize_record(element))
+        try:
+            purchase_order = (element.find("PurchaseOrderNumber").text, element.find("SpecificValue").text)
+            if purchase_order not in purchase_orders:
+                norm_set.add(normalize_record(element))
+                purchase_orders.add(purchase_order)
+        except AttributeError:
+            norm_set.add(normalize_record(element))
     return norm_set
 
 
@@ -44,3 +51,13 @@ def from_file(filename):
         return ET.parse(filename)
     except ET.ParseError as err:
         print('Malformed xml: ' + filename + str(err.position))
+        return None
+
+
+def get_value(root, attribute):
+    element = root.find(attribute)
+    if element is not None:
+        return root.find(attribute).text
+    else:
+        return None
+
