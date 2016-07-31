@@ -49,12 +49,15 @@ def remove_duplicates(xml_set, canon):
 # create a file of only unique records
 def create_upload_file(directory, filename):
     xml = my_xml.from_file(filename)
+    if xml is None:
+        return 1
     canon = set()
     if os.path.isfile(get_canon_path(directory)):
         canon |= my_xml.to_set(my_xml.from_file(get_canon_path(directory)))
     output, canon = remove_duplicates(my_xml.to_set(xml), canon)
     my_xml.print_as_xml(output, get_output_path(filename), 'wb')
     my_xml.print_as_xml(canon, get_canon_path(directory), 'wb')
+    return 0
 
 
 # build a relative path and filename for a canon file
@@ -92,13 +95,15 @@ def clean(directory):
             # if there is no canon file for the agency, create one
             if not (os.path.isfile(get_canon_path(agency))):
                 build_canon(agency)
-            if not (os.path.isfile(get_output_path(filename))):
-                create_upload_file(agency, filename)
-            progress_bar.update(os.path.getsize(filename))
-            if not (os.path.isfile(agency + os.sep + filename)):
-                shutil.move(filename, agency)
-            else:
-                os.remove(filename)
+            error = 0
+            if not(os.path.isfile(get_output_path(filename))):
+                error = create_upload_file(agency, filename)
+            if error is not 1:
+                progress_bar.update(os.path.getsize(filename))
+                if not(os.path.isfile(agency + os.sep + filename)):
+                    shutil.move(filename, agency)
+                else:
+                    os.remove(filename)
 
 
 def main():

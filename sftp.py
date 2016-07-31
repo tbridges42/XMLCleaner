@@ -1,9 +1,14 @@
 import pysftp
-from time import sleep
 from tqdm import tqdm
 
 
-# TODO get info from config file
+def get_creds():
+    creds = {}
+    with open("config.txt") as file:
+        for line in file:
+            (key, val) = [x.strip() for x in line.split('=')]
+            creds[key] = val
+    return creds
 
 
 def download(hostname, username, password, localpath):
@@ -14,7 +19,7 @@ def download(hostname, username, password, localpath):
             total_size = total_size + file.st_size
         with tqdm(total=total_size, unit='B', unit_scale=True, desc='Downloading files') as progress_bar:
             for file in files:
-                sftp.get(path + '/' + file.filename, localpath=localpath+file.filename)
+                sftp.get(creds["path"] + '/' + file.filename, localpath=creds["localpath"]+file.filename)
                 progress_bar.update(file.st_size)
 
 

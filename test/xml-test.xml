@@ -26,6 +26,21 @@
 		<NIGPCode>94511561</NIGPCode>
 	</Purchase>
 	<Purchase>
+		<Description>Duplicate record with matching PO number</Description>
+		<PurchaseOrderNumber>35</PurchaseOrderNumber>
+		<SpecificValue>1234</SpecificValue>
+	</Purchase>
+	<Purchase>
+		<Description>Different record with duplicate PO information</Description>
+		<PurchaseOrderNumber>35</PurchaseOrderNumber>
+		<SpecificValue>1234</SpecificValue>
+	</Purchase>
+	<Purchase>
+		<Description>Record with the same PO number but different price</Description>
+		<PurchaseOrderNumber>35</PurchaseOrderNumber>
+		<SpecificValue>1235</SpecificValue>
+	</Purchase>
+	<Purchase>
 		<Description>Simple Duplicate Record</Description>
 	</Purchase>
 	<Purchase>

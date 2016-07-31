@@ -1,23 +1,33 @@
 <?xml version="1.0"?>
 <Purchases>
     <Purchase>
-        <Description>Simple Unique Record</Description>
-    </Purchase>
+    <Description>Simple Duplicate Record</Description>
+  </Purchase>
     <Purchase>
-        <Description>Complicated Duplicate Record</Description>
-        <SpecificValue>126845311</SpecificValue>
-        <NIGPCode>94511561</NIGPCode>
-    </Purchase>
+    <Description>Duplicate record with matching PO number</Description>
+    <PurchaseOrderNumber>35</PurchaseOrderNumber>
+    <SpecificValue>1234</SpecificValue>
+  </Purchase>
     <Purchase>
-        <Description>Complicated Unique Record</Description>
-        <SpecificValue>1268694151</SpecificValue>
-        <NIGPCode>94511</NIGPCode>
-    </Purchase>
+    <Description>Duplicate self-closing tag</Description>
+    <NIGPCode></NIGPCode>
+  </Purchase>
     <Purchase>
-        <Description>Duplicate self-closing tag</Description>
-        <NIGPCode></NIGPCode>
-    </Purchase>
+    <Description>Record with the same PO number but different price</Description>
+    <PurchaseOrderNumber>35</PurchaseOrderNumber>
+    <SpecificValue>1235</SpecificValue>
+  </Purchase>
     <Purchase>
-        <Description>Simple Duplicate Record</Description>
-    </Purchase>
+    <Description>Complicated Duplicate Record</Description>
+    <SpecificValue>126845311</SpecificValue>
+    <NIGPCode>94511561</NIGPCode>
+  </Purchase>
+    <Purchase>
+    <Description>Complicated Unique Record</Description>
+    <SpecificValue>1268694151</SpecificValue>
+    <NIGPCode>94511</NIGPCode>
+  </Purchase>
+    <Purchase>
+    <Description>Simple Unique Record</Description>
+  </Purchase>
 </Purchases>
