@@ -16,17 +16,10 @@ def get_xml_files(directoryname):
     return files
 
 
-# Get the current working folder
-def get_working_folder():
-    for (dirpath, dirnames, filenames) in walk(os.path.dirname(os.path.abspath(__file__))):
-        for (dirname) in dirnames:
-            return dirname
-
-
 # get all files to be tested
-def get_test_files():
+def get_test_files(directory):
     files = []
-    for (dirpath, dirnames, filenames) in walk(os.path.dirname(os.path.abspath(__file__))):
+    for (dirpath, dirnames, filenames) in walk(directory):
         for (filename) in filenames:
             if filename.endswith('.xml'):
                 files.append(filename)
@@ -83,9 +76,9 @@ def get_agency_name(filename):
     return agency
 
 
-def main():
-    files = get_test_files()
+def clean(directory):
     total_size = 0
+    files = get_test_files(directory)
     for file in files:
         total_size = total_size + os.path.getsize(file)
     with tqdm(total=total_size, unit='B', unit_scale=True, desc='Cleaning files') as progress_bar:
@@ -97,15 +90,20 @@ def main():
             if not (os.path.isdir(agency)):
                 os.mkdir(agency)
             # if there is no canon file for the agency, create one
-            if not(os.path.isfile(get_canon_path(agency))):
+            if not (os.path.isfile(get_canon_path(agency))):
                 build_canon(agency)
-            if not(os.path.isfile(get_output_path(filename))):
+            if not (os.path.isfile(get_output_path(filename))):
                 create_upload_file(agency, filename)
             progress_bar.update(os.path.getsize(filename))
-            if not(os.path.isfile(agency + os.sep + filename)):
+            if not (os.path.isfile(agency + os.sep + filename)):
                 shutil.move(filename, agency)
             else:
                 os.remove(filename)
+
+
+def main():
+    clean(os.path.dirname(os.path.abspath(__file__)))
+
 
 if __name__ == "__main__":
     main()

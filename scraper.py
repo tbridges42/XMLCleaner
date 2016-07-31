@@ -72,8 +72,8 @@ def accept_purchases_on_screen(browser):
             break
 
 
-def accept_purchases(browser):
-    login(get_creds(), browser)
+def accept_purchases(browser, creds):
+    login(creds, browser)
     time.sleep(5)
     browser.find_element_by_xpath("//*[text()='Purchase Approvals']").click()
     time.sleep(1)
@@ -93,17 +93,23 @@ def accept_purchases(browser):
         accept_purchases_on_screen(browser)
 
 
-def upload_xmls(browser):
-    login(get_creds(), browser)
+def upload_xmls(browser, creds):
+    login(creds, browser)
     time.sleep(3)
     browser.find_element_by_link_text('Enter Procurement Data')
     browser.find_element_by_link_text('AUTOMATED PURCHASE IMPORT')
 
 
+def scrape(creds):
+    browser = get_browser()
+    accept_purchases(browser, creds)
+    upload_xmls(browser, creds)
+
+
 def main():
     browser = get_browser()
-    accept_purchases(browser)
-    upload_xmls(browser)
+    accept_purchases(browser, get_creds())
+    upload_xmls(browser, get_creds())
 
 
 if __name__ == "__main__":

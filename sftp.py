@@ -6,7 +6,7 @@ from tqdm import tqdm
 # TODO get info from config file
 
 
-def download():
+def download(hostname, username, password, localpath):
     with pysftp.Connection(hostname, username=username, password=password) as sftp:
         files = [file for file in sftp.listdir_attr(path) if file.st_size > 104]
         total_size = 0
@@ -19,7 +19,7 @@ def download():
 
 
 def main():
-    download()
+    download(hostname, username, password, localpath)
 
 
 if __name__ == "__main__":

@@ -6,9 +6,9 @@ from tqdm import tqdm
 
 
 # get all files to be merged
-def getunmergedfiles():
+def getunmergedfiles(directory):
     files = []
-    for (dirpath, dirnames, filenames) in walk(os.path.dirname(os.path.abspath(__file__))):
+    for (dirpath, dirnames, filenames) in walk():
         for (filename) in filenames:
             if filename.startswith('upload') and filename.endswith('.xml'):
                 files.append(filename)
@@ -16,11 +16,13 @@ def getunmergedfiles():
     return files
 
 
-def main():
+def merge(directory):
     agencies = {}
-    files = getunmergedfiles()
+    files = getunmergedfiles(directory)
     with tqdm(total=len(files), unit_scale=True, desc='Merging files') as progress_bar:
-        for (filename) in getunmergedfiles():
+        for (filename) in files:
+            if "merged" in filename:
+                continue
             # the agency abbreviation is the last section of a hyphen-separated filename
             agency = filename.split('-')[-1].split('.')[0]
             # one agency has an additional "85" in the last section
@@ -32,10 +34,13 @@ def main():
             agencyset |= my_xml.to_set(my_xml.from_file(filename))
             agencies[agency] = agencyset
             progress_bar.update(1)
-
     for (agency) in agencies:
         print(agency)
         my_xml.print_as_xml(agencies[agency], "upload-" + agency + "-" + time.strftime("%y%m%d") + "-merged.xml", "wb")
+
+
+def main():
+    merge(os.path.dirname(os.path.abspath(__file__)))
 
 
 if __name__ == "__main__":
